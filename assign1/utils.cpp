@@ -21,13 +21,13 @@ std::ostream& operator<<(std::ostream& os, const Course& course);
  * @returns     A vector of the split strings.
  */
 std::vector<std::string> split(const std::string& s, char delim) {
-  std::vector<std::string> return_vec;
-  std::stringstream ss(s);
-  std::string token;
-  while (std::getline(ss, token, delim)) {
-    return_vec.push_back(token);
-  }
-  return return_vec;
+    std::vector<std::string> return_vec;
+    std::stringstream ss(s);
+    std::string token;
+    while (std::getline(ss, token, delim)) {
+        return_vec.push_back(token);
+    }
+    return return_vec;
 }
 
 /**
@@ -38,8 +38,8 @@ std::vector<std::string> split(const std::string& s, char delim) {
  * We will learn more about what's going on in this function in Weeks 3 and 5!
  */
 void delete_elem_from_vector(std::vector<Course>& v, const Course& elem) {
-  std::vector<Course>::iterator it = std::find(v.begin(), v.end(), elem);
-  v.erase(it);
+    std::vector<Course>::iterator it = std::find(v.begin(), v.end(), elem);
+    v.erase(it);
 }
 
 /**
@@ -47,9 +47,9 @@ void delete_elem_from_vector(std::vector<Course>& v, const Course& elem) {
  * @param vector_of_courses The vector of courses to print.
  */
 void print_courses(const std::vector<Course>& vector_of_courses) {
-  for (const Course& course : vector_of_courses) {
-    std::cout << course << std::endl;
-  }
+    for (const Course& course : vector_of_courses) {
+        std::cout << course << std::endl;
+    }
 }
 
 /* ========================================================================= *
@@ -58,48 +58,53 @@ void print_courses(const std::vector<Course>& vector_of_courses) {
  * ========================================================================= */
 
 bool operator==(const Course& lhs, const Course& rhs) {
-  return lhs.title == rhs.title && lhs.number_of_units == rhs.number_of_units &&
-         lhs.quarter == rhs.quarter;
+    return lhs.title == rhs.title &&
+           lhs.number_of_units == rhs.number_of_units &&
+           lhs.quarter == rhs.quarter;
 }
 
 std::ostream& operator<<(std::ostream& os, const Course& course) {
-  os << course.title << ", " << course.number_of_units << ", " << course.quarter;
-  return os;
+    os << course.title << ", " << course.number_of_units << ", "
+       << course.quarter;
+    return os;
 }
 
 template <typename T>
 concept is_valid_course = requires(T t) {
-  { T{"Standard C++ Programming", "1", "2023-2024 Winter"} };
-  std::is_same_v<T, Course>;
+    { T{"Standard C++ Programming", "1", "2023-2024 Winter"} };
+    std::is_same_v<T, Course>;
 };
 
 int run_autograder() {
-  auto run_program = [](std::string program, std::initializer_list<std::string> args) {
-    std::stringstream ss;
+    auto run_program = [](std::string program,
+                          std::initializer_list<std::string> args) {
+        std::stringstream ss;
 
-    ss << program;
-    for (const auto& arg : args) {
-      ss << ' ' << arg;
+        ss << program;
+        for (const auto& arg : args) {
+            ss << ' ' << arg;
+        }
+
+        std::cout.flush();
+        return system(ss.str().c_str());
+    };
+
+    std::string python;
+    for (const auto& option :
+         {"python", "python3", "/usr/bin/python3", "/usr/bin/python"}) {
+        if (run_program(option, {"--version"}) == 0) {
+            python = option;
+            break;
+        }
     }
 
-    std::cout.flush();
-    return system(ss.str().c_str());
-  };
-
-  std::string python;
-  for (const auto& option : {"python", "python3", "/usr/bin/python3", "/usr/bin/python"}) {
-    if (run_program(option, {"--version"}) == 0) {
-      python = option;
-      break;
+    if (python.empty()) {
+        std::cerr
+            << "Python was not found on your system. Please install Python and "
+               "try again."
+            << "\n";
+        std::exit(1);
     }
-  }
 
-  if (python.empty()) {
-    std::cerr << "Python was not found on your system. Please install Python and "
-                 "try again."
-              << "\n";
-    std::exit(1);
-  }
-
-  return run_program(python, {"autograder/autograder.py"});
+    return run_program(python, {"autograder/autograder.py"});
 }
