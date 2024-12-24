@@ -86,7 +86,8 @@
     "text_encoding": "cpp",
     "thread": "cpp",
     "cinttypes": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "ranges": "cpp"
   },
   "C_Cpp.default.cppStandard": "c++2a"
 }
