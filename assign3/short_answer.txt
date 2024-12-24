@@ -5,7 +5,7 @@ Make a Class
 ------------
 
 Q1. What’s const-correctness and why is it important?
-A1. TODO
+A1. const corrctness is a explicit declaration on parameter, member function or return value. It is important because it can protect data from unexpected modification.
 
 Q2. Is your class const-correct? How do you know?
-A2. TODO
+A2. Yes.
